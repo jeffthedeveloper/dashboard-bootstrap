@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>DataVision AI | Dashboard de Vendas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" />
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="./css/adminlte.css" />
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #7f5af0;
+            --secondary-color: #00f5c3;
+            --dark-bg: #1a1a2e;
+            --card-bg: #1f1f3a;
+            --text-light: rgba(255, 255, 255, 0.8);
+        }
+        
+        body {
+            background: var(--dark-bg);
+            color: white;
+        }
+        
+        .app-wrapper {
+            background: var(--dark-bg);
+        }
+        
+        .app-header {
+            background: var(--card-bg) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .app-sidebar {
+            background: var(--card-bg) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link {
+            color: var(--text-light) !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+        }
+        
+        .brand-link {
+            color: var(--secondary-color) !important;
+            font-weight: bold;
+        }
+        
+        .main-header .navbar-nav .nav-link {
+            color: var(--text-light) !important;
+        }
+        
+        .content-wrapper {
+            background: var(--dark-bg) !important;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .card-header {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .small-box {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .small-box .inner {
+            color: white;
+        }
+        
+        .small-box .icon {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .small-box-footer {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+        
+        .bg-primary { background: var(--primary-color) !important; }
+        .bg-info { background: var(--secondary-color) !important; }
+        .bg-warning { background: #fbbf24 !important; }
+        .bg-success { background: #10b981 !important; }
+        .bg-danger { background: #ef4444 !important; }
+        
+        .user-panel .info {
+            color: white;
+        }
+        
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .content-header h1 {
+            color: white;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--secondary-color);
+        }
+        
+        .table-dark {
+            background: var(--card-bg);
+        }
+        
+        .progress {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .dropdown-menu {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .dropdown-item {
+            color: var(--text-light);
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .navbar-badge {
+            background: var(--primary-color) !important;
+        }
+        
+        .funnel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+        }
+        
+        .funnel-step {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            min-height: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .funnel-step:hover {
+            transform: scale(1.02);
+        }
+        
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: 50px repeat(6, 1fr);
+            gap: 4px;
+            padding: 20px;
+        }
+        
+        .heat-cell {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .heat-cell:hover {
+            transform: scale(1.1);
+        }
+        
+        .heat-cell.low { background: rgba(127, 90, 240, 0.3); }
+        .heat-cell.medium { background: rgba(127, 90, 240, 0.6); }
+        .heat-cell.high { background: rgba(0, 245, 195, 0.6); }
+        .heat-cell.very-high { background: rgba(0, 245, 195, 0.9); }
+        
+        .day-label, .hour-label {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gauge-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .gauge-info {
+            position: absolute;
+            text-align: center;
+        }
+        
+        .gauge-percentage {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .gauge-status {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <!-- Header -->
+        <nav class="app-header navbar navbar-expand bg-body">
+            <div class="container-fluid">
+                <!-- Sidebar toggle -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a href="#" class="nav-link">Dashboard</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a href="#" class="nav-link">Relatórios</a>
+                    </li>
+                </ul>
+                
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ms-auto">
+                    <!-- Notifications -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                            <i class="bi bi-bell"></i>
+                            <span class="navbar-badge badge text-bg-warning">3</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                            <span class="dropdown-item dropdown-header">3 Notificações</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="bi bi-envelope me-2"></i> Nova venda registrada
+                                <span class="float-end text-muted fs-7">3 min</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="bi bi-users me-2"></i> Meta de conversões atingida
+                                <span class="float-end text-muted fs-7">12 min</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">Ver todas as notificações</a>
+                        </div>
+                    </li>
+                    
+                    <!-- User menu -->
+                    <li class="nav-item dropdown user-menu">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img src="https://via.placeholder.com/40x40/7f5af0/ffffff?text=U" class="user-image img-circle elevation-2" alt="User Image">
+                            <span class="d-none d-md-inline" id="userName">Usuário</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                            <li class="user-header text-center p-3">
+                                <img src="https://via.placeholder.com/90x90/7f5af0/ffffff?text=U" class="img-circle elevation-2" alt="User Image">
+                                <p id="userInfo">
+                                    Usuário - Administrador
+                                    <small>Membro desde Jun. 2025</small>
+                                </p>
+                            </li>
+                            <li class="user-footer">
+                                <a href="#" class="btn btn-default btn-flat">Perfil</a>
+                                <a href="#" class="btn btn-default btn-flat float-end" onclick="logout()">Sair</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Sidebar -->
+        <aside class="app-sidebar bg-dark sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="dashboard.html" class="brand-link">
+                <i class="bi bi-graph-up-arrow brand-image"></i>
+                <span class="brand-text font-weight-light"><b>DataVision</b> AI</span>
+            </a>
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- User panel -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="https://via.placeholder.com/40x40/7f5af0/ffffff?text=U" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block" id="sidebarUserName">Usuário</a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link active">
+                                <i class="nav-icon bi bi-speedometer2"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-graph-up"></i>
+                                <p>Vendas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-people"></i>
+                                <p>Clientes</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-box"></i>
+                                <p>Produtos</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-bar-chart"></i>
+                                <p>Relatórios</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-gear"></i>
+                                <p>Configurações</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Dashboard de Vendas</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Dashboard</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- KPI Cards -->
+                    <div class="row">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>R$ 30.670</h3>
+                                    <p>Receita Total</p>
+                                    <small class="text-success">+12,5% vs. mês anterior</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">Mais info <i class="bi bi-arrow-right-circle"></i></a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <h3>363</h3>
+                                    <p>Vendas Concluídas</p>
+                                    <small class="text-success">+8,2% vs. mês anterior</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-cart-check"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">Mais info <i class="bi bi-arrow-right-circle"></i></a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>10.352</h3>
+                                    <p>Conversões</p>
+                                    <small class="text-muted">Meta: 15.000</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-bullseye"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">Mais info <i class="bi bi-arrow-right-circle"></i></a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>R$ 84,49</h3>
+                                    <p>Ticket Médio</p>
+                                    <small class="text-danger">-2,1% vs. mês anterior</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-tag"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">Mais info <i class="bi bi-arrow-right-circle"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts Row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Jornada do Cliente</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="funnel-container">
+                                        <div class="funnel-step" style="width: 100%; background: #7f5af0;">
+                                            <span>Visitantes</span>
+                                            <strong>150.000</strong>
+                                        </div>
+                                        <div class="funnel-step" style="width: 80%; background: #00f5c3;">
+                                            <span>Leads</span>
+                                            <strong>18.000</strong>
+                                        </div>
+                                        <div class="funnel-step" style="width: 60%; background: #fbbf24;">
+                                            <span>Oportunidades</span>
+                                            <strong>1.200</strong>
+                                        </div>
+                                        <div class="funnel-step" style="width: 40%; background: #10b981;">
+                                            <span>Vendas</span>
+                                            <strong>363</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Desempenho Mensal</h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="performanceChart" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Secondary Charts -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Distribuição por Canal</h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="channelChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Ranking de Produtos</h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="productsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Meta de Receita</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="gauge-container">
+                                        <canvas id="gaugeChart" width="200" height="200"></canvas>
+                                        <div class="gauge-info">
+                                            <div class="gauge-percentage">85%</div>
+                                            <div class="gauge-status">Excelente</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Meta:</span>
+                                            <span>R$ 36.000</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Atual:</span>
+                                            <span style="color: var(--secondary-color)">R$ 30.670</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Restante:</span>
+                                            <span style="color: #fbbf24">R$ 5.330</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Insights Row -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Mapa de Calor de Acessos</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="heatmap-container">
+                                        <div></div>
+                                        <div class="hour-label">00h</div>
+                                        <div class="hour-label">04h</div>
+                                        <div class="hour-label">08h</div>
+                                        <div class="hour-label">12h</div>
+                                        <div class="hour-label">16h</div>
+                                        <div class="hour-label">20h</div>
+                                        
+                                        <div class="day-label">Dom</div>
+                                        <div class="heat-cell low"></div>
+                                        <div class="heat-cell low"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell medium"></div>
+                                        
+                                        <div class="day-label">Seg</div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell high"></div>
+                                        
+                                        <div class="day-label">Ter</div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell high"></div>
+                                        
+                                        <div class="day-label">Qua</div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell high"></div>
+                                        
+                                        <div class="day-label">Qui</div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell high"></div>
+                                        
+                                        <div class="day-label">Sex</div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell very-high"></div>
+                                        <div class="heat-cell high"></div>
+                                        
+                                        <div class="day-label">Sáb</div>
+                                        <div class="heat-cell low"></div>
+                                        <div class="heat-cell low"></div>
+                                        <div class="heat-cell medium"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell high"></div>
+                                        <div class="heat-cell medium"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="bi bi-lightbulb me-2"></i>Insights de IA
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-warning">
+                                        <h6><i class="bi bi-trending-down me-2"></i>Queda nas Conversões</h6>
+                                        <p class="mb-2">Observamos uma queda de 15% nas conversões via Facebook Ads nos fins de semana.</p>
+                                        <small><strong>💡 Sugestão:</strong> revisar o público-alvo ou o criativo dos anúncios para este período.</small>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm w-100">Ver Todos os Insights</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/adminlte.js"></script>
+    <script src="dashboard-charts.js"></script>
+    
+    <script>
+        // Verificar autenticação
+        window.addEventListener('load', function() {
+            const userData = localStorage.getItem('userData');
+            if (!userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const user = JSON.parse(userData);
+            
+            // Verificar se o login ainda é válido
+            if (!user.rememberMe && !isRecentLogin(user.loginTime)) {
+                localStorage.removeItem('userData');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Atualizar informações do usuário na interface
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('sidebarUserName').textContent = user.name;
+            document.getElementById('userInfo').innerHTML = `
+                ${user.name} - ${user.role}
+                <small>Membro desde Jun. 2025</small>
+            `;
+        });
+        
+        function isRecentLogin(loginTime) {
+            const now = new Date();
+            const login = new Date(loginTime);
+            const diffHours = (now - login) / (1000 * 60 * 60);
+            return diffHours < 24;
+        }
+        
+        function logout() {
+            localStorage.removeItem('userData');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
+

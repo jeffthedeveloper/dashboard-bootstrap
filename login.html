@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>DataVision AI | Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" />
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="./css/adminlte.css" />
+    
+    <style>
+        .login-page {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+        }
+        
+        .login-box {
+            width: 400px;
+            margin: 0 auto;
+            padding-top: 5%;
+        }
+        
+        .login-logo a {
+            color: #00f5c3;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .login-logo i {
+            font-size: 2rem;
+        }
+        
+        .card {
+            background: rgba(31, 31, 58, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-card-body {
+            color: white;
+        }
+        
+        .login-box-msg {
+            color: #00f5c3;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #00f5c3;
+            box-shadow: 0 0 0 0.2rem rgba(0, 245, 195, 0.25);
+            color: white;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .input-group-text {
+            background: rgba(127, 90, 240, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #7f5af0;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #7f5af0, #00f5c3);
+            border: none;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #6b47d8, #00d4aa);
+            transform: translateY(-1px);
+        }
+        
+        .form-check-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .social-auth-links a {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .social-auth-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .forgot-password {
+            color: #00f5c3;
+            text-decoration: none;
+        }
+        
+        .forgot-password:hover {
+            color: #00d4aa;
+            text-decoration: underline;
+        }
+        
+        .demo-credentials {
+            background: rgba(0, 245, 195, 0.1);
+            border: 1px solid rgba(0, 245, 195, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            color: #00f5c3;
+        }
+        
+        .demo-credentials h6 {
+            color: #00f5c3;
+            margin-bottom: 10px;
+        }
+        
+        .demo-credentials p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body class="login-page bg-body-secondary">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="index.html">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span><b>DataVision</b> AI</span>
+            </a>
+        </div>
+        
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Faça login para acessar o dashboard</p>
+                
+                <form id="loginForm">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Email" id="email" required />
+                        <div class="input-group-text">
+                            <span class="bi bi-envelope"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Senha" id="password" required />
+                        <div class="input-group-text">
+                            <span class="bi bi-lock-fill"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="rememberMe" />
+                                <label class="form-check-label" for="rememberMe">
+                                    Lembrar de mim
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-4">
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Entrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="social-auth-links text-center mb-3 d-grid gap-2">
+                    <p>- OU -</p>
+                    <a href="#" class="btn">
+                        <i class="bi bi-google me-2"></i> Entrar com Google
+                    </a>
+                    <a href="#" class="btn">
+                        <i class="bi bi-microsoft me-2"></i> Entrar com Microsoft
+                    </a>
+                </div>
+                
+                <p class="mb-1 text-center">
+                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                </p>
+                
+                <div class="demo-credentials">
+                    <h6><i class="bi bi-info-circle me-2"></i>Credenciais de Demonstração</h6>
+                    <p><strong>Email:</strong> admin@datavision.ai</p>
+                    <p><strong>Senha:</strong> admin123</p>
+                    <p><strong>Ou:</strong> demo@datavision.ai / demo123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/adminlte.js"></script>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            // Validação simples de credenciais
+            const validCredentials = [
+                { email: 'admin@datavision.ai', password: 'admin123', role: 'admin' },
+                { email: 'demo@datavision.ai', password: 'demo123', role: 'user' },
+                { email: 'manager@datavision.ai', password: 'manager123', role: 'manager' }
+            ];
+            
+            const user = validCredentials.find(cred => 
+                cred.email === email && cred.password === password
+            );
+            
+            if (user) {
+                // Salvar dados do usuário no localStorage
+                const userData = {
+                    email: user.email,
+                    role: user.role,
+                    name: user.email.split('@')[0],
+                    loginTime: new Date().toISOString(),
+                    rememberMe: rememberMe
+                };
+                
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                // Redirecionar para o dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Credenciais inválidas. Verifique o email e senha.');
+            }
+        });
+        
+        // Verificar se já está logado
+        window.addEventListener('load', function() {
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                const user = JSON.parse(userData);
+                if (user.rememberMe || isRecentLogin(user.loginTime)) {
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        });
+        
+        function isRecentLogin(loginTime) {
+            const now = new Date();
+            const login = new Date(loginTime);
+            const diffHours = (now - login) / (1000 * 60 * 60);
+            return diffHours < 24; // Login válido por 24 horas
+        }
+    </script>
+</body>
+</html>
+
